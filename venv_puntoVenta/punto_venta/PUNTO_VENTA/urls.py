@@ -35,6 +35,9 @@ urlpatterns = [
     path('actualizar_compra/<int:id>/', views.actualizar_compra, name='actualizar_compra'),
     path('eliminar_compra/<int:id>/', views.eliminar_compra, name='eliminar_compra'),
 
+    path('lista_movimientos/', views.lista_movimientos, name='lista_movimientos'),
+    path('actualizar_inventario/<int:id>/', views.actualizar_inventario, name='actualizar_inventario'),
+    path('eliminar_inventario/<int:id>/', views.eliminar_inventario, name='eliminar_inventario'),
 
     path('test/', views.test, name='test'),
     path('index/', views.index, name='index'),

@@ -143,6 +143,9 @@ class Inventario(models.Model):
     cantidad = models.IntegerField()
     tipo_actividad = models.CharField(max_length=50)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    referencia_pedido = models.ForeignKey(Pedido, on_delete=models.SET_NULL, null=True, blank=True)
+    referencia_compra = models.ForeignKey(Compra, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.tipo_movimiento} de {self.producto.nombre}"
+        return f"{self.tipo_movimiento.capitalize()} de {self.producto.nombre} - {self.cantidad} unidades"
+

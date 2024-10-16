@@ -348,6 +348,15 @@ def nuevo_pedido(request):
                 producto.cantidad -= int(cantidad)
                 producto.save()
 
+                # Registrar movimiento de inventario (salida)
+                Inventario.objects.create(
+                    tipo_movimiento='salida',
+                    tipo_actividad='Venta',
+                    producto=producto,
+                    cantidad=int(cantidad),
+                    referencia_pedido=pedido
+                )
+
             pedido.calcular_total()
 
             return redirect('lista_pedidos')
@@ -359,6 +368,7 @@ def nuevo_pedido(request):
         'pedido_form': pedido_form,
         'productos': productos,
     })
+
 
 
 
@@ -406,8 +416,8 @@ def nueva_compra(request):
         compra_form = CompraCreateForm(request.POST)
         if compra_form.is_valid():
             compra = compra_form.save(commit=False)
-            compra.numero_compra = f"COMP-{uuid.uuid4()}"  # Generar un número de compra único
-            compra.estado = 'pendiente'  # Estado por defecto
+            compra.numero_compra = f"COMP-{uuid.uuid4()}"
+            compra.estado = 'pendiente'
             compra.save()
 
             productos = request.POST.getlist('productos')
@@ -421,6 +431,15 @@ def nueva_compra(request):
                 producto.cantidad += int(cantidad)
                 producto.save()
 
+                # Registrar movimiento de inventario (entrada)
+                Inventario.objects.create(
+                    tipo_movimiento='entrada',
+                    tipo_actividad='Compra',
+                    producto=producto,
+                    cantidad=int(cantidad),
+                    referencia_compra=compra
+                )
+
             compra.calcular_total()
 
             return redirect('lista_compras')
@@ -432,6 +451,7 @@ def nueva_compra(request):
         'compra_form': compra_form,
         'productos': productos,
     })
+
 
 
 
@@ -478,6 +498,41 @@ def calcular_total(self):
     self.total = total
     self.save()
 
+
+# ___________________MOVIMIENTOS INVENTARIO_____________________________
+
+def lista_movimientos(request):
+    queryset = Inventario.objects.all()
+    movimientos_data = [
+        {field.name: getattr(item, field.name) for field in Inventario._meta.fields}
+        for item in queryset
+    ]
+    return render(request, 'form_select.html', {
+        'queryset': movimientos_data,
+        'modelo': 'Inventario'
+    })
+
+def actualizar_inventario(request, id):
+    queryset = get_object_or_404(Inventario, id=id)
+    if request.method == 'POST':
+        form = InventarioForm(request.POST, instance=queryset)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_movimientos')
+    else:
+        form = InventarioForm(instance=queryset)
+    return render(request, 'form_update.html', {
+        'form': form,
+        'modelo': 'Inveantario'
+    })
+
+def eliminar_inventario(request, id):
+    queryset = get_object_or_404(Inventario, id=id)
+    if request.method == 'POST':
+        queryset.delete()
+        return redirect('lista_movimientos')
+    else:
+        return HttpResponse("Metodo no permitido")
 
 
 def test(request):
