@@ -159,6 +159,12 @@
                 <li><a href="{% url 'lista_pedidos' %}" class="menu-item">Listado</a></li>
                 <li><a href="{% url 'nuevo_pedido' %}" class="menu-item">Nuevo</a></li>
             </ul>
+        </div> <div class="menu-item" onclick="toggleSubmenu(event)">
+            <span class="icon">📦</span><span>Compras</span>
+            <ul class="submenu">
+                <li><a href="{% url 'lista_compras' %}" class="menu-item">Listado</a></li>
+                <li><a href="{% url 'nueva_compra' %}" class="menu-item">Nuevo</a></li>
+            </ul>
         </div> 
         <div class="menu-item" onclick="toggleSubmenu(event)">
             <span class="icon">📦</span><span>Productos</span>

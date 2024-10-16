@@ -18,8 +18,7 @@ class ProveedorForm(forms.ModelForm):
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = '__all__'
-        # fields = ['nombre', 'edad', 'fecha_nacimiento']
+        exclude = '__all__'
 
 
 class ClienteForm(forms.ModelForm):
@@ -57,10 +56,15 @@ class PedidoCreateForm(forms.ModelForm):
         fields = ['cliente'] 
 
 
-class DetalleCompraForm(forms.ModelForm):
+class CompraForm(forms.ModelForm):
     class Meta:
         model = Compra
-        fields = '__all__'
+        fields = ['proveedor', 'estado']
+
+class CompraCreateForm(forms.ModelForm):
+    class Meta:
+        model = Compra
+        fields = ['proveedor']       
 
 
 class DetalleCompraForm(forms.ModelForm):

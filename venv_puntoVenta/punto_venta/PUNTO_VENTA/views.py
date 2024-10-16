@@ -333,12 +333,10 @@ def nuevo_pedido(request):
         pedido_form = PedidoCreateForm(request.POST)
         if pedido_form.is_valid():
             pedido = pedido_form.save(commit=False)
-            # Generar un número de pedido único usando UUID
             pedido.numero_pedido = f"PED-{uuid.uuid4()}"
-            pedido.estado = 'Pendiente'
+            pedido.estado = 'pendiente'
             pedido.save()
 
-            # Obtener los productos seleccionados y las cantidades
             productos = request.POST.getlist('productos')
             cantidades = request.POST.getlist('cantidades')
 
@@ -346,7 +344,6 @@ def nuevo_pedido(request):
                 producto = get_object_or_404(Producto, id=producto_id)
                 DetallePedido.objects.create(pedido=pedido, producto=producto, cantidad=cantidad)
 
-            # Calcular el total del pedido llamando al método calcular_total
             pedido.calcular_total()
 
             return redirect('lista_pedidos')
@@ -397,10 +394,73 @@ def eliminar_pedido(request, id):
 
 
 
+# ___________________COMPRAS_____________________________
+
+def nueva_compra(request):
+    if request.method == 'POST':
+        compra_form = CompraCreateForm(request.POST)
+        if compra_form.is_valid():
+            compra = compra_form.save(commit=False)
+            compra.numero_compra = f"COMP-{uuid.uuid4()}"  # Generar un número de compra único
+            compra.estado = 'pendiente'  # Estado por defecto
+            compra.save()
+
+            # Obtener los productos seleccionados y cantidades
+            productos = request.POST.getlist('productos')
+            cantidades = request.POST.getlist('cantidades')
+
+            for producto_id, cantidad in zip(productos, cantidades):
+                producto = get_object_or_404(Producto, id=producto_id)
+                DetalleCompra.objects.create(compra=compra, producto=producto, cantidad=cantidad)
+
+            # Calcular el total de la compra
+            compra.calcular_total()
+
+            return redirect('lista_compras')
+    else:
+        compra_form = CompraCreateForm()
+
+    productos = Producto.objects.all()  # Para seleccionar los productos comprados
+    return render(request, 'form_create_compra.html', {
+        'compra_form': compra_form,
+        'productos': productos,
+    })
 
 
+def lista_compras(request):
+    queryset = Compra.objects.all()
+    compras_data = [
+        {field.name: getattr(item, field.name) for field in Compra._meta.fields}
+        for item in queryset
+    ]
+    return render(request, 'form_select.html', {
+        'queryset': compras_data,
+        'modelo': 'Compra'
+    })
 
 
+def actualizar_compra(request, id):
+    queryset = get_object_or_404(Compra, id=id)
+    if request.method == 'POST':
+        form = CompraForm(request.POST, instance=queryset)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_compras')
+    else:
+        form = CompraForm(instance=queryset)
+    return render(request, 'form_update.html', {
+        'form': form,
+        'modelo': 'Compra'
+    })
+
+
+def eliminar_compra(request, id):
+    queryset = get_object_or_404(Compra, id=id)
+    if request.method == 'POST':
+        queryset.delete()
+        return redirect('lista_compras')
+    else:
+        return HttpResponse("Metodo no permitido")
 
 
 
