@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>Crear {{ modelo }}</title>
+</head>
+<body>
+    <h1>Crear {{ modelo }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }} 
+        <button type="submit">Guardar</button>
+    </form>
+    <div>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+    </div>
+</body>
+</html>
