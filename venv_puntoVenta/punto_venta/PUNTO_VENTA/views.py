@@ -344,17 +344,22 @@ def nuevo_pedido(request):
                 producto = get_object_or_404(Producto, id=producto_id)
                 DetallePedido.objects.create(pedido=pedido, producto=producto, cantidad=cantidad)
 
+                # Actualizar stock del producto
+                producto.cantidad -= int(cantidad)
+                producto.save()
+
             pedido.calcular_total()
 
             return redirect('lista_pedidos')
     else:
         pedido_form = PedidoCreateForm()
-    
+
     productos = Producto.objects.all()
     return render(request, 'form_create_pedido.html', {
         'pedido_form': pedido_form,
         'productos': productos,
     })
+
 
 
 def lista_pedidos(request):
@@ -405,7 +410,6 @@ def nueva_compra(request):
             compra.estado = 'pendiente'  # Estado por defecto
             compra.save()
 
-            # Obtener los productos seleccionados y cantidades
             productos = request.POST.getlist('productos')
             cantidades = request.POST.getlist('cantidades')
 
@@ -413,18 +417,22 @@ def nueva_compra(request):
                 producto = get_object_or_404(Producto, id=producto_id)
                 DetalleCompra.objects.create(compra=compra, producto=producto, cantidad=cantidad)
 
-            # Calcular el total de la compra
+                # Actualizar stock del producto
+                producto.cantidad += int(cantidad)
+                producto.save()
+
             compra.calcular_total()
 
             return redirect('lista_compras')
     else:
         compra_form = CompraCreateForm()
 
-    productos = Producto.objects.all()  # Para seleccionar los productos comprados
+    productos = Producto.objects.all()
     return render(request, 'form_create_compra.html', {
         'compra_form': compra_form,
         'productos': productos,
     })
+
 
 
 def lista_compras(request):
@@ -462,6 +470,13 @@ def eliminar_compra(request, id):
     else:
         return HttpResponse("Metodo no permitido")
 
+
+def calcular_total(self):
+    total = self.detallecompra_set.aggregate(
+        total=Sum(F('producto__costo') * F('cantidad'), output_field=DecimalField())
+    )['total'] or 0
+    self.total = total
+    self.save()
 
 
 
