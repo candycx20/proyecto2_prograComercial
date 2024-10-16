@@ -196,12 +196,12 @@
                             <td>{{ value }}</td>
                         {% endfor %}
                         <td>
-                            <a href="{% url 'actualizar_producto' item.id %}" class="btn btn-edit">Actualizar</a>
-                            <form action="{% url 'eliminar_producto' item.id %}" method="post" style="display:inline;">
+                            <a href="{% url 'actualizar_'|add:modelo|lower item.id %}" class="btn btn-edit">Actualizar</a>
+                            <form action="{% url 'eliminar_'|add:modelo|lower item.id %}" method="post" style="display:inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-delete">Eliminar</button>
                             </form>
-                        </td>
+                        </td>                        
                     </tr>
                 {% endfor %}
             </tbody>
