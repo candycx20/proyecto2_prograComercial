@@ -25,6 +25,16 @@ urlpatterns = [
     path('actualizar_cliente/<int:id>/', views.actualizar_cliente, name='actualizar_cliente'),
     path('eliminar_cliente/<int:id>/', views.eliminar_cliente, name='eliminar_cliente'),
 
+    path('nuevo_usuario/', views.nuevo_usuario, name='nuevo_usuario'),
+    path('lista_usuarios/', views.lista_usuarios, name='lista_usuarios'),
+    path('actualizar_usuario/<int:id>/', views.actualizar_usuario, name='actualizar_usuario'),
+    path('eliminar_usuario/<int:id>/', views.eliminar_usuario, name='eliminar_usuario'),
+
+    path('nuevo_rol/', views.nuevo_rol, name='nuevo_rol'),
+    path('lista_roles/', views.lista_roles, name='lista_roles'),
+    path('actualizar_rol/<int:id>/', views.actualizar_rol, name='actualizar_rol'),
+    path('eliminar_rol/<int:id>/', views.eliminar_rol, name='eliminar_rol'),
+
     path('nuevo_pedido/', views.nuevo_pedido, name='nuevo_pedido'),
     path('lista_pedidos/', views.lista_pedidos, name='lista_pedidos'),
     path('actualizar_pedido/<int:id>/', views.actualizar_pedido, name='actualizar_pedido'),

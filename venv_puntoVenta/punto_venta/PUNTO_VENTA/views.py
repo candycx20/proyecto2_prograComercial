@@ -264,7 +264,7 @@ def actualizar_rol(request, id):
     })
 
 
-def eliminar_roles(request, id):
+def eliminar_rol(request, id):
     queryset = get_object_or_404(Rol, id=id)
     if request.method == 'POST':
         queryset.delete()
@@ -316,7 +316,7 @@ def actualizar_usuario(request, id):
     })
 
 
-def eliminar_usuarios(request, id):
+def eliminar_usuario(request, id):
     queryset = get_object_or_404(Usuario, id=id)
     if request.method == 'POST':
         queryset.delete()

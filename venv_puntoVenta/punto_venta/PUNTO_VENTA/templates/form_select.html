@@ -200,6 +200,20 @@
             <ul class="submenu">
                 <li><a href="{% url 'lista_movimientos' %}" class="menu-item">Listado</a></li>
             </ul>
+        </div>  
+        <div class="menu-item" onclick="toggleSubmenu(event)">
+            <span class="icon">📦</span><span>Usuarios</span>
+            <ul class="submenu">
+                <li><a href="{% url 'lista_usuarios' %}" class="menu-item">Listado</a></li>
+                <li><a href="{% url 'nuevo_usuario' %}" class="menu-item">Nuevo</a></li>
+            </ul>
+        </div>  
+        <div class="menu-item" onclick="toggleSubmenu(event)">
+            <span class="icon">📦</span><span>Roles</span>
+            <ul class="submenu">
+                <li><a href="{% url 'lista_roles' %}" class="menu-item">Listado</a></li>
+                <li><a href="{% url 'nuevo_rol' %}" class="menu-item">Nuevo</a></li>
+            </ul>
         </div> 
     </div>
     <div class="content">
