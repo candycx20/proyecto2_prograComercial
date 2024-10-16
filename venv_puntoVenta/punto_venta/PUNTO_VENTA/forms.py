@@ -46,10 +46,15 @@ class PedidoForm(forms.ModelForm):
         fields = '__all__'
 
 
-class DetallePedidoForm(forms.ModelForm):
+class PedidoForm(forms.ModelForm):
     class Meta:
-        model = DetallePedido
-        fields = '__all__'
+        model = Pedido
+        fields = ['cliente', 'estado'] 
+
+class PedidoCreateForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = ['cliente'] 
 
 
 class DetalleCompraForm(forms.ModelForm):

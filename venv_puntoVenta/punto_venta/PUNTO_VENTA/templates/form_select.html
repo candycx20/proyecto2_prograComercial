@@ -154,6 +154,13 @@
             <span class="icon">🏠</span><span>Home</span>
         </a>
         <div class="menu-item" onclick="toggleSubmenu(event)">
+            <span class="icon">📦</span><span>Pedidos</span>
+            <ul class="submenu">
+                <li><a href="{% url 'lista_pedidos' %}" class="menu-item">Listado</a></li>
+                <li><a href="{% url 'nuevo_pedido' %}" class="menu-item">Nuevo</a></li>
+            </ul>
+        </div> 
+        <div class="menu-item" onclick="toggleSubmenu(event)">
             <span class="icon">📦</span><span>Productos</span>
             <ul class="submenu">
                 <li><a href="{% url 'lista_productos' %}" class="menu-item">Listado</a></li>
@@ -165,6 +172,13 @@
             <ul class="submenu">
                 <li><a href="{% url 'lista_categorias' %}" class="menu-item">Listado</a></li>
                 <li><a href="{% url 'nueva_categoria' %}" class="menu-item">Nuevo</a></li>
+            </ul>
+        </div> 
+        <div class="menu-item" onclick="toggleSubmenu(event)">
+            <span class="icon">📦</span><span>Clientes</span>
+            <ul class="submenu">
+                <li><a href="{% url 'lista_clientes' %}" class="menu-item">Listado</a></li>
+                <li><a href="{% url 'nuevo_cliente' %}" class="menu-item">Nuevo</a></li>
             </ul>
         </div> 
         <div class="menu-item" onclick="toggleSubmenu(event)">
