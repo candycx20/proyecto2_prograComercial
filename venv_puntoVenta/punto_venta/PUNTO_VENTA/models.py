@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
+from django.db.models import Sum
+from django.db.models import F, Sum
+
 
 # Modelo Categoria
 class Categoria(models.Model):
@@ -71,48 +74,65 @@ class Usuario(models.Model):
 class Pedido(models.Model):
     numero_pedido = models.CharField(max_length=100, unique=True)
     fecha = models.DateTimeField(auto_now_add=True)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     estado = models.CharField(
         max_length=50,
         choices=[('pendiente', 'Pendiente'), ('completado', 'Completado'), ('cancelado', 'Cancelado')]
     )
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
 
+    def calcular_total(self):
+        # Calcula el total sumando los precios de los productos multiplicados por sus cantidades
+        total = self.detallepedido_set.aggregate(
+            total=Sum(F('producto__precio') * F('cantidad'))
+        )['total']
+        self.total = total or 0
+        self.save()
+
     def __str__(self):
         return f"Pedido {self.numero_pedido} - {self.cliente}"
 
-# Modelo DetallePedido
+
 class DetallePedido(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
 
     def __str__(self):
-        return f"Detalle del Pedido {self.pedido.numero_pedido}"
+        return f"Detalle del Pedido {self.pedido.numero_pedido} - {self.producto.nombre}"
 
 # Modelo Compra
 class Compra(models.Model):
     numero_compra = models.CharField(max_length=100, unique=True)
     fecha = models.DateTimeField(auto_now_add=True)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     estado = models.CharField(
         max_length=50,
         choices=[('pendiente', 'Pendiente'), ('recibida', 'Recibida'), ('cancelada', 'Cancelada')]
     )
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+
+    def calcular_total(self):
+        # Calcula el total sumando los costos de los productos en el detalle de la compra
+        total = self.detallecompra_set.aggregate(
+            total=Sum(F('producto__costo') * F('cantidad'))
+        )['total']
+        self.total = total or 0
+        self.save()
 
     def __str__(self):
-        return f"Compra {self.numero_compra} - {self.proveedor}"
+        return f"Compra {self.numero_compra} - {self.proveedor.empresa}"
 
-# Modelo DetalleCompra
+
 class DetalleCompra(models.Model):
     compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
 
     def __str__(self):
-        return f"Detalle de la Compra {self.compra.numero_compra}"
+        return f"Detalle de la Compra {self.compra.numero_compra} - Producto: {self.producto.nombre}"
 
+        
 # Modelo Inventario
 class Inventario(models.Model):
     fecha_movimiento = models.DateTimeField(auto_now_add=True)
