@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+{% if user.is_authenticated%}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,4 +102,81 @@
         <!-- <a href="{% url 'lista_productos' %}">Volver a la lista de productos</a>  -->
     </div>
 </body>
+{% else %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Denegado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .auth-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .login-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #45a049;
+        }
+
+        .login-btn a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .icon-lock {
+            font-size: 50px;
+            color: #f44336;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="icon-lock">🔒</div>
+        <h2>Acceso Denegado</h2>
+        <p>No estás autenticado. Por favor, inicia sesión para continuar.</p>
+        <button class="login-btn">
+            <a href="{% url 'login' %}">Iniciar sesión</a>
+        </button>
+    </div>
+</body>
+{% endif %}
 </html>

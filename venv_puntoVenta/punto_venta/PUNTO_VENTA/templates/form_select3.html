@@ -144,6 +144,10 @@
         .btn-delete {
             background-color: #f44336;
         }
+
+        .btn-detail {
+            background-color: #3682f4;
+        }
     </style>
 </head>
 <body>
@@ -206,7 +210,7 @@
             <ul class="submenu">
                 <li><a href="{% url 'lista_movimientos' %}" class="menu-item">Listado</a></li>
             </ul>
-        </div>  
+        </div> 
         {% endif %}
         <div class="logout-form">
             {% if user.is_authenticated %}
@@ -227,7 +231,6 @@
                             <th>{{ field }}</th>
                         {% endfor %}
                     {% endif %}
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -235,14 +238,7 @@
                     <tr>
                         {% for value in item.values %}
                             <td>{{ value }}</td>
-                        {% endfor %}
-                        <td>
-                            <a href="{% url 'actualizar_'|add:modelo|lower item.id %}" class="btn btn-edit">Actualizar</a>
-                            <form action="{% url 'eliminar_'|add:modelo|lower item.id %}" method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-delete">Eliminar</button>
-                            </form>
-                        </td>                        
+                        {% endfor %}                       
                     </tr>
                 {% endfor %}
             </tbody>

@@ -39,11 +39,6 @@ class UsuarioForm(forms.ModelForm):
         fields = '__all__'
 
 
-class PedidoForm(forms.ModelForm):
-    class Meta:
-        model = Pedido
-        fields = '__all__'
-
 
 class PedidoForm(forms.ModelForm):
     class Meta:
@@ -55,6 +50,11 @@ class PedidoCreateForm(forms.ModelForm):
         model = Pedido
         fields = ['cliente'] 
 
+class PedidoUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = ['estado'] 
+
 
 class CompraForm(forms.ModelForm):
     class Meta:
@@ -64,12 +64,23 @@ class CompraForm(forms.ModelForm):
 class CompraCreateForm(forms.ModelForm):
     class Meta:
         model = Compra
-        fields = ['proveedor']       
+        fields = ['proveedor']      
+
+class CompraUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Compra
+        fields = ['estado']     
 
 
 class DetalleCompraForm(forms.ModelForm):
     class Meta:
         model = DetalleCompra
+        fields = '__all__'
+
+
+class DetallePedidoForm(forms.ModelForm):
+    class Meta:
+        model = DetallePedido
         fields = '__all__'
 
 
