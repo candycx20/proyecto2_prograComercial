@@ -379,12 +379,12 @@ def lista_pedidos(request):
 def actualizar_pedido(request, id):
     queryset = get_object_or_404(Pedido, id=id)
     if request.method == 'POST':
-        form = PedidoForm(request.POST, instance=queryset)
+        form = PedidoUpdateForm(request.POST, instance=queryset)
         if form.is_valid():
             form.save()
             return redirect('lista_pedidos')
     else:
-        form = PedidoForm(instance=queryset)
+        form = PedidoUpdateForm(instance=queryset)
     return render(request, 'form_update.html', {
         'form': form,
         'modelo': 'Pedido'
@@ -393,11 +393,28 @@ def actualizar_pedido(request, id):
 
 def eliminar_pedido(request, id):
     queryset = get_object_or_404(Pedido, id=id)
+    
     if request.method == 'POST':
+        detalles_pedido = queryset.detallepedido_set.all()
+        
+        for detalle in detalles_pedido:
+            producto = detalle.producto
+            producto.cantidad += detalle.cantidad
+            producto.save()
+
+            Inventario.objects.create(
+                tipo_movimiento='entrada',
+                tipo_actividad='Devolución por eliminación de pedido',
+                producto=producto,
+                cantidad=detalle.cantidad,
+                referencia_pedido=queryset
+            )
         queryset.delete()
+        
         return redirect('lista_pedidos')
     else:
         return HttpResponse("Metodo no permitido")
+
 
 
 
@@ -419,11 +436,9 @@ def nueva_compra(request):
                 producto = get_object_or_404(Producto, id=producto_id)
                 DetalleCompra.objects.create(compra=compra, producto=producto, cantidad=cantidad)
 
-                # Actualizar stock del producto
                 producto.cantidad += int(cantidad)
                 producto.save()
 
-                # Registrar movimiento de inventario (entrada)
                 Inventario.objects.create(
                     tipo_movimiento='entrada',
                     tipo_actividad='Compra',
@@ -462,12 +477,12 @@ def lista_compras(request):
 def actualizar_compra(request, id):
     queryset = get_object_or_404(Compra, id=id)
     if request.method == 'POST':
-        form = CompraForm(request.POST, instance=queryset)
+        form = CompraUpdateForm(request.POST, instance=queryset)
         if form.is_valid():
             form.save()
             return redirect('lista_compras')
     else:
-        form = CompraForm(instance=queryset)
+        form = CompraUpdateForm(instance=queryset)
     return render(request, 'form_update.html', {
         'form': form,
         'modelo': 'Compra'
@@ -476,11 +491,29 @@ def actualizar_compra(request, id):
 
 def eliminar_compra(request, id):
     queryset = get_object_or_404(Compra, id=id)
+    
     if request.method == 'POST':
+        detalles_compra = queryset.detallecompra_set.all()
+
+        for detalle in detalles_compra:
+            producto = detalle.producto
+            producto.cantidad -= detalle.cantidad  
+            producto.save()
+
+            Inventario.objects.create(
+                tipo_movimiento='salida',
+                tipo_actividad='Retiro por eliminación de compra',
+                producto=producto,
+                cantidad=detalle.cantidad,
+                referencia_compra=queryset
+            )
+
         queryset.delete()
+        
         return redirect('lista_compras')
     else:
         return HttpResponse("Metodo no permitido")
+
 
 
 def calcular_total(self):

@@ -100,15 +100,6 @@
             {{ form.as_p }} 
             <button type="submit">Guardar</button>
         </form>
-
-        <div class="logout-form">
-            {% if user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Cerrar sesión</button>
-            </form>
-            {% endif %}
-        </div>
     </div>
 </body>
 {% else %}
