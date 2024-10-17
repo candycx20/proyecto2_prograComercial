@@ -39,11 +39,6 @@ class UsuarioForm(forms.ModelForm):
         fields = '__all__'
 
 
-class PedidoForm(forms.ModelForm):
-    class Meta:
-        model = Pedido
-        fields = '__all__'
-
 
 class PedidoForm(forms.ModelForm):
     class Meta:
@@ -80,6 +75,12 @@ class CompraUpdateForm(forms.ModelForm):
 class DetalleCompraForm(forms.ModelForm):
     class Meta:
         model = DetalleCompra
+        fields = '__all__'
+
+
+class DetallePedidoForm(forms.ModelForm):
+    class Meta:
+        model = DetallePedido
         fields = '__all__'
 
 

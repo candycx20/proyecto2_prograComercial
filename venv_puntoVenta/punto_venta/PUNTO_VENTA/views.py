@@ -336,11 +336,9 @@ def nuevo_pedido(request):
                 producto = get_object_or_404(Producto, id=producto_id)
                 DetallePedido.objects.create(pedido=pedido, producto=producto, cantidad=cantidad)
 
-                # Actualizar stock del producto
                 producto.cantidad -= int(cantidad)
                 producto.save()
 
-                # Registrar movimiento de inventario (salida)
                 Inventario.objects.create(
                     tipo_movimiento='salida',
                     tipo_actividad='Venta',
@@ -374,6 +372,20 @@ def lista_pedidos(request):
         'queryset': pedidos_data,
         'modelo': 'Pedido'
     })
+
+
+def detalle_pedido(request, id):
+    queryset = DetallePedido.objects.all()
+    detallePedidos_data = [
+        {field.name: getattr(item, field.name) for field in DetallePedido._meta.fields}
+        for item in queryset
+    ]
+    return render(request, 'form_select.html', {
+        'queryset': detallePedidos_data,
+        'modelo': 'DetallePedido'
+    })
+
+
 
 
 def actualizar_pedido(request, id):
@@ -461,7 +473,6 @@ def nueva_compra(request):
 
 
 
-
 def lista_compras(request):
     queryset = Compra.objects.all()
     compras_data = [
@@ -471,6 +482,17 @@ def lista_compras(request):
     return render(request, 'form_select.html', {
         'queryset': compras_data,
         'modelo': 'Compra'
+    })
+
+def detalle_compra(request, id):
+    queryset = DetalleCompra.objects.all()
+    detalleCompras_data = [
+        {field.name: getattr(item, field.name) for field in DetalleCompra._meta.fields}
+        for item in queryset
+    ]
+    return render(request, 'form_select3.html', {
+        'queryset': detalleCompras_data,
+        'modelo': 'DetalleCompra'
     })
 
 
@@ -532,7 +554,7 @@ def lista_movimientos(request):
         {field.name: getattr(item, field.name) for field in Inventario._meta.fields}
         for item in queryset
     ]
-    return render(request, 'form_select.html', {
+    return render(request, 'form_select3.html', {
         'queryset': movimientos_data,
         'modelo': 'Inventario'
     })

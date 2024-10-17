@@ -39,11 +39,13 @@ urlpatterns = [
     path('lista_pedidos/', views.lista_pedidos, name='lista_pedidos'),
     path('actualizar_pedido/<int:id>/', views.actualizar_pedido, name='actualizar_pedido'),
     path('eliminar_pedido/<int:id>/', views.eliminar_pedido, name='eliminar_pedido'),
+    path('detalles_pedido/<int:id>/', views.detalle_pedido, name='detalle_pedido'),
 
     path('nueva_compra/', views.nueva_compra, name='nueva_compra'),
     path('lista_compras/', views.lista_compras, name='lista_compras'),
     path('actualizar_compra/<int:id>/', views.actualizar_compra, name='actualizar_compra'),
     path('eliminar_compra/<int:id>/', views.eliminar_compra, name='eliminar_compra'),
+    path('detalles_compra/<int:id>/', views.detalle_compra, name='detalle_compra'),
 
     path('lista_movimientos/', views.lista_movimientos, name='lista_movimientos'),
     path('actualizar_inventario/<int:id>/', views.actualizar_inventario, name='actualizar_inventario'),
