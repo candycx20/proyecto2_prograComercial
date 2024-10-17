@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+{% if user.is_authenticated%}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -153,6 +154,7 @@
         <a href="{% url 'inicio' %}" class="menu-item">
             <span class="icon">🏠</span><span>Home</span>
         </a>
+        {% if user.is_superuser or user.groups.all.0.name == "Vendedor"%}
         <div class="menu-item" onclick="toggleSubmenu(event)">
             <span class="icon">📦</span><span>Pedidos</span>
             <ul class="submenu">
@@ -161,12 +163,30 @@
             </ul>
         </div> 
         <div class="menu-item" onclick="toggleSubmenu(event)">
+            <span class="icon">📦</span><span>Clientes</span>
+            <ul class="submenu">
+                <li><a href="{% url 'lista_clientes' %}" class="menu-item">Listado</a></li>
+                <li><a href="{% url 'nuevo_cliente' %}" class="menu-item">Nuevo</a></li>
+            </ul>
+        </div> 
+        {% endif %}
+        {% if user.is_superuser or user.groups.all.0.name == "Comprador"%}
+        <div class="menu-item" onclick="toggleSubmenu(event)">
             <span class="icon">📦</span><span>Compras</span>
             <ul class="submenu">
                 <li><a href="{% url 'lista_compras' %}" class="menu-item">Listado</a></li>
                 <li><a href="{% url 'nueva_compra' %}" class="menu-item">Nuevo</a></li>
             </ul>
         </div> 
+        <div class="menu-item" onclick="toggleSubmenu(event)">
+            <span class="icon">📦</span><span>Proveedores</span>
+            <ul class="submenu">
+                <li><a href="{% url 'lista_proveedores' %}" class="menu-item">Listado</a></li>
+                <li><a href="{% url 'nuevo_proveedor' %}" class="menu-item">Nuevo</a></li>
+            </ul>
+        </div> 
+        {% endif %}
+        {% if user.is_superuser or user.groups.all.0.name == "Administrador"%}
         <div class="menu-item" onclick="toggleSubmenu(event)">
             <span class="icon">📦</span><span>Productos</span>
             <ul class="submenu">
@@ -182,20 +202,6 @@
             </ul>
         </div> 
         <div class="menu-item" onclick="toggleSubmenu(event)">
-            <span class="icon">📦</span><span>Clientes</span>
-            <ul class="submenu">
-                <li><a href="{% url 'lista_clientes' %}" class="menu-item">Listado</a></li>
-                <li><a href="{% url 'nuevo_cliente' %}" class="menu-item">Nuevo</a></li>
-            </ul>
-        </div> 
-        <div class="menu-item" onclick="toggleSubmenu(event)">
-            <span class="icon">📦</span><span>Proveedores</span>
-            <ul class="submenu">
-                <li><a href="{% url 'lista_proveedores' %}" class="menu-item">Listado</a></li>
-                <li><a href="{% url 'nuevo_proveedor' %}" class="menu-item">Nuevo</a></li>
-            </ul>
-        </div> 
-        <div class="menu-item" onclick="toggleSubmenu(event)">
             <span class="icon">📦</span><span>Movimientos Inventario</span>
             <ul class="submenu">
                 <li><a href="{% url 'lista_movimientos' %}" class="menu-item">Listado</a></li>
@@ -208,6 +214,8 @@
                 <li><a href="{% url 'nuevo_usuario' %}" class="menu-item">Nuevo</a></li>
             </ul>
         </div>  
+        {% endif %}
+        {% if user.is_superuser%}
         <div class="menu-item" onclick="toggleSubmenu(event)">
             <span class="icon">📦</span><span>Roles</span>
             <ul class="submenu">
@@ -215,6 +223,15 @@
                 <li><a href="{% url 'nuevo_rol' %}" class="menu-item">Nuevo</a></li>
             </ul>
         </div> 
+        {% endif %}
+        <div class="logout-form">
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Cerrar sesión</button>
+            </form>
+            {% endif %}
+        </div>
     </div>
     <div class="content">
         <h1>Listado de {{ modelo }}</h1>
@@ -265,4 +282,81 @@
     {% endblock %}
     </div>
 </body>
+{% else %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Denegado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .auth-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .login-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #45a049;
+        }
+
+        .login-btn a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .icon-lock {
+            font-size: 50px;
+            color: #f44336;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="icon-lock">🔒</div>
+        <h2>Acceso Denegado</h2>
+        <p>No estás autenticado. Por favor, inicia sesión para continuar.</p>
+        <button class="login-btn">
+            <a href="{% url 'login' %}">Iniciar sesión</a>
+        </button>
+    </div>
+</body>
+{% endif %}
 </html>

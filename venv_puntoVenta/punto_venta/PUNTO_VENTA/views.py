@@ -290,15 +290,7 @@ def nuevo_usuario(request):
 
 
 def lista_usuarios(request):
-    queryset = Usuario.objects.all()
-    usuarios_data = [
-        {field.name: getattr(item, field.name) for field in Usuario._meta.fields}
-        for item in queryset
-    ]
-    return render(request, 'form_select.html', {
-        'queryset': usuarios_data,
-        'modelo': 'Usuario'
-    })
+    return render(request, 'select_form.html')
 
 
 def actualizar_usuario(request, id):
