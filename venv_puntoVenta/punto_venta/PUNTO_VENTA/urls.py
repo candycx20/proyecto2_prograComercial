@@ -1,57 +1,47 @@
 from django.urls import path
 from . import views
+from rest_framework_simplejwt.views import *
+from .views import *
 
 
 urlpatterns = [
-    path('', views.inicio, name='inicio'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
-    path('lista_categorias/', views.lista_categorias, name='lista_categorias'),
-    path('actualizar_categoria/<int:id>/', views.actualizar_categoria, name='actualizar_categoria'),
-    path('eliminar_categoria/<int:id>/', views.eliminar_categoria, name='eliminar_categoria'),
-    path('nueva_categoria/', views.nueva_categoria, name='nueva_categoria'),
+    path('categorias/', CategoriaListCreate.as_view(), name='categoria-list-create'),
+    path('categorias/<int:pk>/', CategoriaDetail.as_view(), name='categoria-detail'),
 
-    path('nuevo_proveedor/', views.nuevo_proveedor, name='nuevo_proveedor'),
-    path('lista_proveedores/', views.lista_proveedores, name='lista_proveedores'),
-    path('actualizar_proveedor/<int:id>/', views.actualizar_proveedor, name='actualizar_proveedor'),
-    path('eliminar_proveedor/<int:id>/', views.eliminar_proveedor, name='eliminar_proveedor'),
+    path('proveedores/', ProveedorListCreate.as_view(), name='proveedor-list-create'),
+    path('proveedores/<int:pk>/', ProveedorDetail.as_view(), name='proveedor-detail'),
 
-    path('nuevo_producto/', views.nuevo_producto, name='nuevo_producto'),
-    path('lista_productos/', views.lista_productos, name='lista_productos'),
-    path('actualizar_producto/<int:id>/', views.actualizar_producto, name='actualizar_producto'),
-    path('eliminar_producto/<int:id>/', views.eliminar_producto, name='eliminar_producto'),
 
-    path('nuevo_cliente/', views.nuevo_cliente, name='nuevo_cliente'),
-    path('lista_clientes/', views.lista_clientes, name='lista_clientes'),
-    path('actualizar_cliente/<int:id>/', views.actualizar_cliente, name='actualizar_cliente'),
-    path('eliminar_cliente/<int:id>/', views.eliminar_cliente, name='eliminar_cliente'),
+    #path('productos/', ProductoList.as_view(), name='producto-list'),
+    path('productos/<int:categoria_id>/<int:proveedor_id>/', ProductoListCreate.as_view(), name='producto-list-create'),
+    path('productos/<int:pk>/', ProductoDetail.as_view(), name='producto-detail'),
 
-    path('nuevo_usuario/', views.nuevo_usuario, name='nuevo_usuario'),
-    path('lista_usuarios/', views.lista_usuarios, name='lista_usuarios'),
-    path('actualizar_usuario/<int:id>/', views.actualizar_usuario, name='actualizar_usuario'),
-    path('eliminar_usuario/<int:id>/', views.eliminar_usuario, name='eliminar_usuario'),
+    path('clientes/', ClienteListCreate.as_view(), name='cliente-list-create'),
+    path('clientes/<int:pk>/', ClienteDetail.as_view(), name='cliente-detail'),
 
-    path('nuevo_rol/', views.nuevo_rol, name='nuevo_rol'),
-    path('lista_roles/', views.lista_roles, name='lista_roles'),
-    path('actualizar_rol/<int:id>/', views.actualizar_rol, name='actualizar_rol'),
-    path('eliminar_rol/<int:id>/', views.eliminar_rol, name='eliminar_rol'),
+    path('roles/', RolListCreate.as_view(), name='rol-list-create'),
+    path('roles/<int:pk>/', RolDetail.as_view(), name='rol-detail'),
 
-    path('nuevo_pedido/', views.nuevo_pedido, name='nuevo_pedido'),
-    path('lista_pedidos/', views.lista_pedidos, name='lista_pedidos'),
-    path('actualizar_pedido/<int:id>/', views.actualizar_pedido, name='actualizar_pedido'),
-    path('eliminar_pedido/<int:id>/', views.eliminar_pedido, name='eliminar_pedido'),
-    path('detalles_pedido/<int:id>/', views.detalle_pedido, name='detalle_pedido'),
+    #path('usuarios/', UsuarioList.as_view(), name='usuario-list'),
+    path('usuarios/<int:rol_id>/', UsuarioListCreate.as_view(), name='usuario-list-create'),
+    path('usuarios/<int:pk>/', UsuarioDetail.as_view(), name='usuario-detail'),
 
-    path('nueva_compra/', views.nueva_compra, name='nueva_compra'),
-    path('lista_compras/', views.lista_compras, name='lista_compras'),
-    path('actualizar_compra/<int:id>/', views.actualizar_compra, name='actualizar_compra'),
-    path('eliminar_compra/<int:id>/', views.eliminar_compra, name='eliminar_compra'),
-    path('detalles_compra/<int:id>/', views.detalle_compra, name='detalle_compra'),
+    #path('pedidos/', PedidoList.as_view(), name='pedido-list'),
+    path('pedidos/<int:cliente_id>/', PedidoListCreate.as_view(), name='pedido-list-create'),
+    path('pedidos/<int:pk>/', PedidoDetail.as_view(), name='pedido-detail'),
 
-    path('lista_movimientos/', views.lista_movimientos, name='lista_movimientos'),
-    path('actualizar_inventario/<int:id>/', views.actualizar_inventario, name='actualizar_inventario'),
-    path('eliminar_inventario/<int:id>/', views.eliminar_inventario, name='eliminar_inventario'),
+    #path('compras/', CompraList.as_view(), name='compra-list'),
+    path('compras/<int:proveedor_id>/', CompraListCreate.as_view(), name='compra-list-create'),
+    path('compras/<int:pk>/', CompraDetail.as_view(), name='compra-detail'),
 
-    path('test/', views.test, name='test'),
-    path('index/', views.index, name='index'),
-    
+    #path('inventarios/', InventarioList.as_view(), name='inventario-list'),
+    path('inventarios/<int:producto_id>/<int:referencia_pedido_id>/<int:referencia_compra_id>/', InventarioListCreate.as_view(), name='inventario-list-create'),
+    path('inventarios/<int:pk>/', InventarioDetail.as_view(), name='inventario-detail'),
 ]
+
+    # path('test/', views.test, name='test'),
+    # path('index/', views.index, name='index'),
+    

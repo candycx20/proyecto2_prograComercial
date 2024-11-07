@@ -38,9 +38,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'PUNTO_VENTA',
+    'rest_framework',
+    'rest_framework_simplejwt'
     #'django.contrib.auth',  #Core authentication framework and its default models.
     #'django.contrib.contenttypes',  #Django content type system (allows permissions to be associated with models).
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
