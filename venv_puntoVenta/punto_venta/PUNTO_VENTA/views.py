@@ -3,12 +3,15 @@ from .models import *
 from .serializers import *
 import uuid
 from .permissions import Admin, Vendedor, SuperAdmin
+from django_filters import rest_framework as filters
 
 # ____________ CATEGORIA ____________
 class CategoriaListCreate(generics.ListCreateAPIView):  # GET (list) | POST (create)
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     permission_classes = [ Admin | SuperAdmin]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['nombre'] 
 
 class CategoriaDetail(generics.RetrieveUpdateDestroyAPIView):  # GET | PUT | DELETE
     queryset = Categoria.objects.all()
@@ -30,6 +33,8 @@ class ProveedorDetail(generics.RetrieveUpdateDestroyAPIView):  # GET | PUT | DEL
 class ProductoListCreate(generics.ListCreateAPIView):  # GET | POST
     serializer_class = ProductoSerializer
     permission_classes = [ Admin | SuperAdmin]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['categoria', 'proveedor']
 
     def get_queryset(self):
         return Producto.objects.all()
@@ -84,6 +89,8 @@ class UsuarioDetail(generics.RetrieveUpdateDestroyAPIView):  # GET | PUT | DELET
 class PedidoListCreate(generics.ListCreateAPIView):  # GET | POST
     serializer_class = PedidoSerializer
     permission_classes = [Vendedor | SuperAdmin]
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['fecha', 'cliente']
 
     def get_queryset(self):
         return Pedido.objects.all()
@@ -102,6 +109,8 @@ class PedidoDetail(generics.RetrieveUpdateDestroyAPIView):  # GET | PUT | DELETE
 # ____________ COMPRA ____________
 class CompraListCreate(generics.ListCreateAPIView):  # GET | POST
     serializer_class = CompraSerializer
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['fecha', 'proveedor']
 
     def get_queryset(self):
         return Compra.objects.all()
@@ -119,6 +128,8 @@ class CompraDetail(generics.RetrieveUpdateDestroyAPIView):  # GET | PUT | DELETE
 # ____________ INVENTARIO ____________
 class InventarioListCreate(generics.ListCreateAPIView):  # GET | POST
     serializer_class = InventarioSerializer
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_fields = ['producto', 'referencia_pedido', 'referencia_compra']
 
     def get_queryset(self):
         return Inventario.objects.all()
