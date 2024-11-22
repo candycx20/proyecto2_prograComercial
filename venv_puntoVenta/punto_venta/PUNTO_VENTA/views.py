@@ -2,8 +2,30 @@ from rest_framework import generics
 from .models import *
 from .serializers import *
 import uuid
-from .permissions import Admin, Vendedor, SuperAdmin
+from .permissions import Admin, Vendedor, SuperAdmin, IsAuthentificated
 from django_filters import rest_framework as filters
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
+from rest_framework.serializers import ModelSerializer
+
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'password']  # Agrega más campos si los necesitas
+
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+
+
 
 # ____________ CATEGORIA ____________
 class CategoriaListCreate(generics.ListCreateAPIView):  # GET (list) | POST (create)

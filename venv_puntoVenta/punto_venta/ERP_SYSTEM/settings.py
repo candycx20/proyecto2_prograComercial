@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'PUNTO_VENTA',
     'rest_framework',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'corsheaders',
     #'django.contrib.auth',  #Core authentication framework and its default models.
     #'django.contrib.contenttypes',  #Django content type system (allows permissions to be associated with models).
 ]
@@ -66,10 +67,19 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     #'django.contrib.sessions.middleware.SessionMiddleware',  #Manages sessions across requests
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000', 
+]
+
 ROOT_URLCONF = 'ERP_SYSTEM.urls'
+
+ALLOWED_HOSTS = ['*']
 
 TEMPLATES = [
     {

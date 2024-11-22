@@ -7,6 +7,7 @@ from .views import *
 urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('user/', CurrentUserView.as_view(), name='current-user'),
     
     path('categorias/', CategoriaListCreate.as_view(), name='categoria-list-create'),
     path('categorias/<int:pk>/', CategoriaDetail.as_view(), name='categoria-detail'),
@@ -40,7 +41,4 @@ urlpatterns = [
     path('inventarios/<int:producto_id>/<int:referencia_pedido_id>/<int:referencia_compra_id>/', InventarioListCreate.as_view(), name='inventario-list-create'),
     path('inventarios/<int:pk>/', InventarioDetail.as_view(), name='inventario-detail'),
 ]
-
-    # path('test/', views.test, name='test'),
-    # path('index/', views.index, name='index'),
     
